@@ -2,6 +2,8 @@ package com.example.androidwatch
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.widget.TextView
@@ -9,6 +11,7 @@ import androidx.core.view.InputDeviceCompat
 import androidx.core.view.MotionEventCompat
 import androidx.core.view.ViewConfigurationCompat
 import com.example.androidwatch.databinding.ActivityMainBinding
+import kotlinx.coroutines.currentCoroutineContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -50,10 +53,10 @@ class MainActivity : Activity()
                     OnTriggerSend(0)
                 } else
                 {
-                    val udpClientThread = UdpClientThread();
                     OnTriggerSend(1)
-                    udpClientThread.start()
                 }
+
+                OnTriggerVibrate(100, 100);
 
                 true
             } else
@@ -64,10 +67,12 @@ class MainActivity : Activity()
         infoText.setOnClickListener {
             if (isMute)
             {
+                OnTriggerVibrate(400, 150);
                 OnTriggerSend(3)
                 isMute = false
             } else
             {
+                OnTriggerVibrate(400, 150);
                 OnTriggerSend(2)
                 isMute = true;
             }
@@ -79,6 +84,17 @@ class MainActivity : Activity()
         val udpClientThread = UdpClientThread();
         udpClientThread.msg = index.toString()
         udpClientThread.start()
+    }
+
+    ///진동을 처리함
+    //갤럭시 워치 최대 세기는 255까지 지원한다.
+    private fun OnTriggerVibrate(duration: Long, power: Int)
+    {
+        // 1. Vibrator 객체 생성
+        val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+
+        //갤럭시 워치는 최대 진동 세기가 255까지만 된다.
+        vibrator.vibrate(VibrationEffect.createOneShot(duration, power));
     }
 
     inner class UdpClientThread : Thread()

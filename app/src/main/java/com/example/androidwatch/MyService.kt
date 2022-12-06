@@ -28,7 +28,6 @@ class MyService : TileService()
                 ).build()
         )
 
-
     override fun onResourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ListenableFuture<ResourceBuilders.Resources>
     {
         return Futures.immediateFuture(
@@ -36,8 +35,7 @@ class MyService : TileService()
                 .addIdToImageMapping(
                     ID_VolumeIcon,
                     ImageResource.Builder().setAndroidResourceByResId(
-                        AndroidImageResourceByResId.Builder().setResourceId(R.drawable.sound)
-                            .build()
+                        AndroidImageResourceByResId.Builder().setResourceId(R.drawable.sound).build()
                     ).build()
                 )
                 .setVersion(RESOURCES_VERSION)
