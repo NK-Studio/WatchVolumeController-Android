@@ -2,7 +2,6 @@ package com.example.androidwatch
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.widget.TextView
@@ -21,6 +20,8 @@ class MainActivity : Activity()
 
     private lateinit var binding: ActivityMainBinding
 
+    private var isMute = false;
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -28,10 +29,10 @@ class MainActivity : Activity()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var s = findViewById<TextView>(R.id.hi)
-        s.requestFocus()
+        val infoText = findViewById<TextView>(R.id.InfoText)
+        infoText.requestFocus()
 
-        s.setOnGenericMotionListener { v, ev ->
+        infoText.setOnGenericMotionListener { v, ev ->
             if (ev.action == MotionEvent.ACTION_SCROLL &&
                 ev.isFromSource(InputDeviceCompat.SOURCE_ROTARY_ENCODER)
             )
@@ -42,15 +43,13 @@ class MainActivity : Activity()
                             ViewConfiguration.get(this), this
                         )
 
-                var isVolumeUp = delta.roundToInt() > 0
+                val isVolumeUp = delta.roundToInt() > 0
 
                 if (isVolumeUp){
-                    val udpClientThread = UdpClientThread();
-                    udpClientThread.msg = "0"
-                    udpClientThread.start()
+                    OnTriggerSend(0)
                 }else{
                     val udpClientThread = UdpClientThread();
-                    udpClientThread.msg = "1"
+                    OnTriggerSend(1)
                     udpClientThread.start()
                 }
 
@@ -60,7 +59,22 @@ class MainActivity : Activity()
                 false
             }
         }
+        infoText.setOnClickListener {
+            if (isMute) {
+                OnTriggerSend(3)
+                isMute = false
+            }else
+            {
+                OnTriggerSend(2)
+                isMute = true;
+            }
+        }
+    }
 
+    private fun OnTriggerSend(index : Int){
+        val udpClientThread = UdpClientThread();
+        udpClientThread.msg = index.toString()
+        udpClientThread.start()
     }
 
     inner class UdpClientThread : Thread()

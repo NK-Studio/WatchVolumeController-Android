@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/box_inset_layout_padding"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
 
@@ -13,12 +11,13 @@
        android:layout_height="match_parent">
 
        <TextView
-           android:id="@+id/hi"
+           android:id="@+id/InfoText"
            android:focusable="true"
            android:focusableInTouchMode="true"
            android:layout_centerInParent="true"
-           android:text="시계 방향 : 볼륨 업\n반시계 방향 볼륨 다운"
-           android:textSize="20sp"
+           android:text="시계 방향 : 볼륨 업\n반시계 방향 볼륨 다운\n글자 터치 : 뮤트 On/Off"
+           android:lineSpacingMultiplier="1.5"
+           android:textSize="17sp"
            android:textAlignment="center"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"/>
