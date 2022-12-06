@@ -45,9 +45,11 @@ class MainActivity : Activity()
 
                 val isVolumeUp = delta.roundToInt() > 0
 
-                if (isVolumeUp){
+                if (isVolumeUp)
+                {
                     OnTriggerSend(0)
-                }else{
+                } else
+                {
                     val udpClientThread = UdpClientThread();
                     OnTriggerSend(1)
                     udpClientThread.start()
@@ -60,10 +62,11 @@ class MainActivity : Activity()
             }
         }
         infoText.setOnClickListener {
-            if (isMute) {
+            if (isMute)
+            {
                 OnTriggerSend(3)
                 isMute = false
-            }else
+            } else
             {
                 OnTriggerSend(2)
                 isMute = true;
@@ -71,7 +74,8 @@ class MainActivity : Activity()
         }
     }
 
-    private fun OnTriggerSend(index : Int){
+    private fun OnTriggerSend(index: Int)
+    {
         val udpClientThread = UdpClientThread();
         udpClientThread.msg = index.toString()
         udpClientThread.start()
@@ -79,14 +83,14 @@ class MainActivity : Activity()
 
     inner class UdpClientThread : Thread()
     {
-        var msg : String? = null
+        var msg: String? = null
 
         override fun run()
         {
             try
             {
                 val port = 9090
-                val address = InetAddress.getByName("") //IPv4 IP주소를 입력하세요
+                val address = InetAddress.getByName("172.30.1.97")
                 val socket = DatagramSocket()
 
                 val buf = msg?.toByteArray()

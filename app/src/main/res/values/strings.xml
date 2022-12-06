@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">AndroidWatch</string>
+    <string name="app_name">PCController</string>
+    <string name="tile_description">PC의 볼륨을 조절할 수 있습니다.</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
