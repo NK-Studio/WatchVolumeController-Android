@@ -86,7 +86,7 @@ class MainActivity : Activity()
             try
             {
                 val port = 9090
-                val address = InetAddress.getByName("172.30.1.97")
+                val address = InetAddress.getByName("") //IPv4 IP주소를 입력하세요
                 val socket = DatagramSocket()
 
                 val buf = msg?.toByteArray()
