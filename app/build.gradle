@@ -50,6 +50,6 @@ dependencies {
     testImplementation "androidx.wear.tiles:tiles-testing:1.1.0"
 
     // Helper library for transforming coroutines to ListenableFutures
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.4.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
 
 }
