@@ -1,25 +1,33 @@
-package com.example.androidwatch
+package com.nkstudio.pc_volume_controller
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewConfiguration
-import android.widget.TextView
 import androidx.core.view.InputDeviceCompat
 import androidx.core.view.MotionEventCompat
 import androidx.core.view.ViewConfigurationCompat
-import com.example.androidwatch.databinding.ActivityMainBinding
-import kotlinx.coroutines.currentCoroutineContext
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import com.nkstudio.pc_volume_controller.databinding.ActivityMainBinding
+import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.CapabilityInfo
+import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import kotlin.math.roundToInt
 
 
-class MainActivity : Activity()
+class MainActivity : FragmentActivity(), CapabilityClient.OnCapabilityChangedListener
 {
+    private lateinit var capabilityClient: CapabilityClient
+    private var androidPhoneNodeWithApp: Node? = null
 
     private lateinit var binding: ActivityMainBinding
 
@@ -32,10 +40,11 @@ class MainActivity : Activity()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val infoText = findViewById<TextView>(R.id.InfoText)
-        infoText.requestFocus()
+        capabilityClient = Wearable.getCapabilityClient(this)
 
-        infoText.setOnGenericMotionListener { v, ev ->
+        binding.InfoText.requestFocus()
+
+        binding.InfoText.setOnGenericMotionListener { v, ev ->
             if (ev.action == MotionEvent.ACTION_SCROLL &&
                 ev.isFromSource(InputDeviceCompat.SOURCE_ROTARY_ENCODER)
             )
@@ -64,7 +73,7 @@ class MainActivity : Activity()
                 false
             }
         }
-        infoText.setOnClickListener {
+        binding.InfoText.setOnClickListener {
             if (isMute)
             {
                 OnTriggerVibrate(400, 150);
@@ -119,5 +128,74 @@ class MainActivity : Activity()
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onCapabilityChanged(capabilityInfo: CapabilityInfo)
+    {
+        // 노드 세트에는 하나의 단말기만 있어야 한다.
+        // 그래서 첫 번째 항목만 가져온다.
+        androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
+
+        UpdateUI()
+    }
+
+    override fun onPause()
+    {
+        super.onPause()
+        Wearable.getCapabilityClient(this).removeListener(this, CAPABILITY_PHONE_APP)
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+        Wearable.getCapabilityClient(this).addListener(this, CAPABILITY_PHONE_APP)
+
+        lifecycleScope.launch {
+            checkIfPhoneHasApp()
+        }
+    }
+
+    private suspend fun checkIfPhoneHasApp()
+    {
+        try
+        {
+            val capabilityInfo = capabilityClient
+                .getCapability(CAPABILITY_PHONE_APP, CapabilityClient.FILTER_ALL)
+                .await()
+
+            Log.d(TAG, "기능 요청이 성공했습니다.")
+
+            withContext(Dispatchers.Main)
+            {
+                androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
+                UpdateUI()
+            }
+        } catch (cancellationException: CancellationException)
+        {
+            // 요청이 정상적으로 취소되었습니다.
+        }
+        catch (throwable: Throwable)
+        {
+            Log.d(TAG, "기능 요청이 결과를 반환하지 못했습니다.")
+        }
+    }
+
+    private fun UpdateUI()
+    {
+        val androidPhoneNodeWithApp = androidPhoneNodeWithApp
+
+        if (androidPhoneNodeWithApp != null)
+            Log.d(TAG, "Installed : 설치가 되어있습니다.")
+        else
+            Log.d(TAG, "Missing : 설치되어 있지 않습니다.")
+    }
+
+    companion object
+    {
+        private const val TAG = "PPAP"
+
+        // 모바일 앱의 wear.xml에 나열된 기능의 이름입니다.
+        // 중요 참고 사항: 이것은 Wear 앱의 기능과 다른 이름을 지정해야 합니다.
+        private const val CAPABILITY_PHONE_APP = "pc_volume_controller_mobile"
     }
 }

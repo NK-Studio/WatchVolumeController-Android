@@ -1,4 +1,4 @@
-package com.example.androidwatch
+package com.nkstudio.pc_volume_controller
 
 import androidx.wear.tiles.*
 import androidx.wear.tiles.DimensionBuilders.dp

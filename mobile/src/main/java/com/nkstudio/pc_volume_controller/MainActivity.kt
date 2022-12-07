@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.nkstudio.pc_volume_controller
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.androidwatch'
+    namespace 'com.nkstudio.pc_volume_controller'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.androidwatch"
+        applicationId 'com.nkstudio.pc_volume_controller'
         minSdk 30
         targetSdk 33
         versionCode 1
@@ -42,6 +42,12 @@ dependencies {
 
     // Use to utilize components and layouts with Material Design in your tiles
     implementation "androidx.wear.tiles:tiles-material:1.1.0"
+
+    //lifecycle.Launch 사용 가능
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    //await를 사용 가능
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
 
     // Use to preview wear tiles in your own app
     debugImplementation "androidx.wear.tiles:tiles-renderer:1.1.0"

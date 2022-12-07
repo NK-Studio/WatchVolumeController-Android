@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.nkstudio.pc_volume_controller
 
 import org.junit.Test
 
