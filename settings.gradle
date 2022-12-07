@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AndroidWatch"
-include ':app'
+include ':wear'
+include ':mobile'
