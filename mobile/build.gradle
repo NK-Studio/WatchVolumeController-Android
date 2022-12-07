@@ -30,6 +30,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -38,7 +42,18 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.gms:play-services-wearable:18.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    //await를 사용 가능
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.wear:wear:1.2.0'
+
+    // Helper library for transforming coroutines to ListenableFutures
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
 }
