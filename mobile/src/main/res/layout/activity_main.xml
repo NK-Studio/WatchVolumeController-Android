@@ -50,7 +50,7 @@
 
     <Button
         android:id="@+id/Send"
-        android:text="저장"
+        android:text="저장 및 워치 전달"
         android:textSize="20sp"
         android:layout_width="250dp"
         android:layout_height="61dp"

@@ -56,4 +56,5 @@ dependencies {
 
     // Helper library for transforming coroutines to ListenableFutures
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 }

@@ -13,6 +13,9 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        vectorDrawables {
+            useSupportLibrary true
+        }
 
     }
 
@@ -24,6 +27,22 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
@@ -45,9 +64,22 @@ dependencies {
 
     //lifecycle.Launch 사용 가능
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
     //await를 사용 가능
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.wear.compose:compose-material:$wear_compose_version"
+    implementation "androidx.wear.compose:compose-foundation:$wear_compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.activity:activity-compose:1.6.1'
+
+    dependencies {
+        implementation "androidx.navigation:navigation-compose:$rootProject.composeNavigationVersion"
+        // ...
+    }
+
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
     // Use to preview wear tiles in your own app
     debugImplementation "androidx.wear.tiles:tiles-renderer:1.1.0"
@@ -57,5 +89,7 @@ dependencies {
 
     // Helper library for transforming coroutines to ListenableFutures
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
 }

@@ -11,7 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture
 private const val RESOURCES_VERSION = "1"
 private const val ID_VolumeIcon = "IC_Volume"
 
-class MyService : TileService()
+class WatchTileService : TileService()
 {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> =
         Futures.immediateFuture(
