@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PCController</string>
+    <string name="app_name">PC Controller</string>
     <string name="tile_description">PC의 볼륨을 조절할 수 있습니다.</string>
     <string name="title_activity_intro">IntroActivity</string>
     <!--

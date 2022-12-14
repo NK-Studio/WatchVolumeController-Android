@@ -9,16 +9,14 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
+import android.view.View.OnClickListener
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
-import androidx.compose.foundation.focusable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -261,7 +259,7 @@ fun StartApp(navController: NavController)
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Button(
@@ -295,7 +293,6 @@ fun StartApp(navController: NavController)
 @Composable
 fun InWearApp(viewModel: MainViewModel)
 {
-    val coroutineScope = rememberCoroutineScope()
     val columnScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
 
@@ -311,9 +308,9 @@ fun InWearApp(viewModel: MainViewModel)
                 val port = viewModel.port
 
                 if (isVolumeUp)
-                    viewModel.onTriggerSend(0, address!!, port!!)
+                    viewModel.onTriggerSend(0, address!!)
                 else
-                    viewModel.onTriggerSend(1, address!!, port!!)
+                    viewModel.onTriggerSend(1, address!!)
 
                 viewModel.onTriggerVibrate(100, 100);
                 true
@@ -324,11 +321,29 @@ fun InWearApp(viewModel: MainViewModel)
         verticalArrangement = Arrangement.Center
     ) {
         Text(
+            modifier = Modifier.clickable {
+                val address = viewModel.address
+                val port = viewModel.port
+
+
+                if (viewModel.isMute.value)
+                {
+                    viewModel.onTriggerSend(3, address!!)
+                    viewModel.isMute.value = false
+                }
+                else
+                {
+                    viewModel.onTriggerSend(2, address!!)
+                    viewModel.isMute.value = true
+                }
+
+                viewModel.onTriggerVibrate(400, 150);
+            },
             text = "시계 방향 : 볼륨 업\n반시계 방향 볼륨 다운\n글자 터치 : 뮤트 On/Off",
             fontSize = 17.sp,
             color = Color.White,
             lineHeight = 30.5.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 
@@ -340,27 +355,30 @@ fun InWearApp(viewModel: MainViewModel)
 @Composable
 fun SettingApp(viewModel: MainViewModel)
 {
+    if (viewModel.address.isNullOrEmpty())
+        viewModel.ipAndPort.value = "연결된 IP : 없음\n연결된 포트 : 9090"
+    else
+        viewModel.ipAndPort.value = "연결된 IP : ${viewModel.address}\n연결된 포트 : 9090"
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
+
+        horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = viewModel.ipAndPort.value,
+            textAlign = TextAlign.Center,
+            fontSize = 17.sp,
+            lineHeight = 25.sp
+        )
 
         if (!viewModel.isConnect.value)
-        {
-            Text(text = "앱과 연결 중..")
-        }
-        else
-        {
-            Text(
-                text = viewModel.ipAndPort.value,
-                textAlign = TextAlign.Center,
-                fontSize = 17.sp,
-                lineHeight = 25.sp
-            )
-        }
+            Text(modifier = Modifier.padding(top = 30.dp), text = "앱과 연결 중", fontSize = 15.sp)
     }
 }
 
@@ -370,6 +388,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application)
 
     val ipAndPort = mutableStateOf("연결된 IP : 없음\n" + "연결된 포트 : 없음")
     val isConnect = mutableStateOf(false)
+    val isMute = mutableStateOf(false)
 
     var address: String? = null
     var port: Int? = null
@@ -387,12 +406,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application)
         vibrator.vibrate(VibrationEffect.createOneShot(duration, power));
     }
 
-    fun onTriggerSend(index: Int, ip: String, port: Int)
+    fun onTriggerSend(index: Int, ip: String)
     {
         val udpClientThread = UdpClientThread();
         udpClientThread.msg = index.toString()
         udpClientThread.address = ip
-        udpClientThread.port = port
         udpClientThread.start()
     }
 
@@ -400,20 +418,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application)
     {
         var msg: String? = null
         var address: String? = null
-        var port: Int? = null
 
         override fun run()
         {
             try
             {
-                val port = port
-
                 val address = InetAddress.getByName(address)
                 val socket = DatagramSocket()
 
                 val buf = msg?.toByteArray()
 
-                val packet = DatagramPacket(buf, buf!!.size, address, port!!)
+                val packet = DatagramPacket(buf, buf!!.size, address, 9090)
                 socket.send(packet)
                 socket.close()
             }
