@@ -2,6 +2,8 @@ package com.nkstudio.pc_volume_controller
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -83,6 +85,15 @@ class MainActivity : AppCompatActivity(), MessageClient.OnMessageReceivedListene
             {
                 sendData(data, APP_DATA_WEARABLE_PAYLOAD_PATH)
             }
+        }
+
+        binding.PCControl.setOnClickListener {
+
+            var controlIntent = Intent(this, Controller::class.java)
+            controlIntent.flags =
+                FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_NO_ANIMATION
+            controlIntent.putExtra("adress", binding.IPNumber.text.toString())
+            startActivity(controlIntent)
         }
     }
 
@@ -347,61 +358,61 @@ class MainActivity : AppCompatActivity(), MessageClient.OnMessageReceivedListene
         return resBool
     }
 
-//    private fun SendMessage(context: Context, msg: String, Path: String)
-//    {
-//        MainScope().launch(Dispatchers.Default)
-//        {
-//            val nodeResults = HashSet<String>()
-//
-//            val nodeListTask = Wearable.getNodeClient(context).connectedNodes
-//
-//            try
-//            {
-//                // 작업을 차단하고 동기식으로 결과를 가져옵니다(백그라운드 스레드에 있기 때문).
-//                val nodes = Tasks.await(nodeListTask)
-//
-//                for (node in nodes)
-//                {
-//                    //노드 결과에 id를 추가
-//                    nodeResults.add(node.id)
-//
-//                    try
-//                    {
-//                        val nodeId = node.id
-//
-//                        //메시지의 데이터를 Uri의 바이트로 설정합니다.
-//                        val payload: ByteArray = msg.toByteArray()
-//
-//                        val sendMessageTask =
-//                            Wearable.getMessageClient(context).sendMessage(nodeId, Path, payload)
-//
-//                        try
-//                        {
-//                            // 작업을 차단하고 동기식으로 결과를 가져옵니다(백그라운드 스레드에 있기 때문).
-//                            val result = Tasks.await(sendMessageTask)
-//
-//                            Log.d("PPAP", "메시지 결과 보내기 : $result")
-//                        }
-//                        catch (e1: Exception)
-//                        {
-//                            e1.printStackTrace()
-//                        }
-//
-//                    }
-//                    catch (e1: Exception)
-//                    {
-//                        Log.d("PPAP", "메시지 예외 보내기")
-//                        e1.printStackTrace()
-//                    }
-//                } //for 루프의 끝
-//            }
-//            catch (e1: Exception)
-//            {
-//                Log.d("PPAP", "메시지 예외 보내기")
-//                e1.printStackTrace()
-//            }
-//        }
-//    }
+    //    private fun SendMessage(context: Context, msg: String, Path: String)
+    //    {
+    //        MainScope().launch(Dispatchers.Default)
+    //        {
+    //            val nodeResults = HashSet<String>()
+    //
+    //            val nodeListTask = Wearable.getNodeClient(context).connectedNodes
+    //
+    //            try
+    //            {
+    //                // 작업을 차단하고 동기식으로 결과를 가져옵니다(백그라운드 스레드에 있기 때문).
+    //                val nodes = Tasks.await(nodeListTask)
+    //
+    //                for (node in nodes)
+    //                {
+    //                    //노드 결과에 id를 추가
+    //                    nodeResults.add(node.id)
+    //
+    //                    try
+    //                    {
+    //                        val nodeId = node.id
+    //
+    //                        //메시지의 데이터를 Uri의 바이트로 설정합니다.
+    //                        val payload: ByteArray = msg.toByteArray()
+    //
+    //                        val sendMessageTask =
+    //                            Wearable.getMessageClient(context).sendMessage(nodeId, Path, payload)
+    //
+    //                        try
+    //                        {
+    //                            // 작업을 차단하고 동기식으로 결과를 가져옵니다(백그라운드 스레드에 있기 때문).
+    //                            val result = Tasks.await(sendMessageTask)
+    //
+    //                            Log.d("PPAP", "메시지 결과 보내기 : $result")
+    //                        }
+    //                        catch (e1: Exception)
+    //                        {
+    //                            e1.printStackTrace()
+    //                        }
+    //
+    //                    }
+    //                    catch (e1: Exception)
+    //                    {
+    //                        Log.d("PPAP", "메시지 예외 보내기")
+    //                        e1.printStackTrace()
+    //                    }
+    //                } //for 루프의 끝
+    //            }
+    //            catch (e1: Exception)
+    //            {
+    //                Log.d("PPAP", "메시지 예외 보내기")
+    //                e1.printStackTrace()
+    //            }
+    //        }
+    //    }
 
     override fun onMessageReceived(message: MessageEvent)
     {

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Controller">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        >
+
+        <Button
+            android:id="@+id/volumeUp"
+            android:layout_marginVertical="30dp"
+            android:layout_centerInParent="true"
+            android:text="볼륨 업"
+            android:layout_width="150dp"
+            android:layout_height="70dp">
+        </Button>
+
+        <Button
+            android:id="@+id/volumeDown"
+            android:layout_marginVertical="30dp"
+            android:layout_centerInParent="true"
+            android:text="볼륨 다운"
+            android:layout_width="150dp"
+            android:layout_height="70dp">
+        </Button>
+
+        <Button
+            android:id="@+id/Mute"
+            android:layout_marginVertical="30dp"
+            android:layout_centerInParent="true"
+            android:text="뮤트"
+            android:layout_width="150dp"
+            android:layout_height="70dp">
+        </Button>
+
+        <Button
+            android:id="@+id/NoMute"
+            android:layout_marginVertical="30dp"
+            android:layout_centerInParent="true"
+            android:text="뮤트 해제"
+            android:layout_width="150dp"
+            android:layout_height="70dp">
+        </Button>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

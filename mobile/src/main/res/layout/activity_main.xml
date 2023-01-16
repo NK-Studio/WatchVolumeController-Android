@@ -50,26 +50,39 @@
 
     <Button
         android:id="@+id/Send"
-        android:text="저장 및 워치 전달"
-        android:textSize="20sp"
         android:layout_width="250dp"
         android:layout_height="61dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="28dp"
+        android:text="저장 및 워치 전달"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PortNumber" />
 
+    <Button
+        android:id="@+id/PCControl"
+        android:layout_width="250dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="28dp"
+        android:text="PC Control"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Send" />
+
     <TextView
         android:id="@+id/InfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:textAlignment="center"
+        android:layout_marginBottom="52dp"
         android:text="워치와 연결됨"
+        android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
 
