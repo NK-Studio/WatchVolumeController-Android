@@ -4,12 +4,15 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
-import android.view.View.OnClickListener
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -18,10 +21,7 @@ import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,7 +39,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.tiles.LayoutElementBuilders.VerticalAlignment
 import com.google.android.gms.wearable.*
 import com.nkstudio.pc_volume_controller.presentation.theme.AndroidWatchTheme
 import org.json.JSONObject
@@ -268,7 +267,24 @@ fun StartApp(navController: NavController)
                     .height(60.dp),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {
-                    navController.navigate("InWearApp")
+
+                    //인터넷이 연결되어 있지 않을 때
+                    val isNotConnect =
+                        !NetworkManager.isWifiEnabled(navController.context) || !NetworkManager.isInternetConnected(
+                            navController.context
+                        )
+
+                    if (isNotConnect)
+                    {
+                        Toast.makeText(
+                            navController.context,
+                            "인터넷이 연결되어 있지 않습니다",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else
+                        navController.navigate("InWearApp")
+
                 }) {
                 Text(text = "사용", fontSize = 20.sp)
             }
@@ -281,7 +297,24 @@ fun StartApp(navController: NavController)
                     .height(60.dp),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {
-                    navController.navigate("SettingApp")
+
+                    val isNotConnect =
+                        !NetworkManager.isWifiEnabled(navController.context) || !NetworkManager.isInternetConnected(
+                            navController.context
+                        )
+
+                    if (isNotConnect)
+                    {
+                        Toast.makeText(
+                            navController.context,
+                            "인터넷이 연결되어 있지 않습니다",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else
+                        navController.navigate("SettingApp")
+
+
                 }) {
                 Text(text = "설정", fontSize = 20.sp)
             }
@@ -359,8 +392,6 @@ fun SettingApp(viewModel: MainViewModel)
         viewModel.ipAndPort.value = "연결된 IP : 없음\n연결된 포트 : 9090"
     else
         viewModel.ipAndPort.value = "연결된 IP : ${viewModel.address}\n연결된 포트 : 9090"
-
-
 
     Column(
         modifier = Modifier
